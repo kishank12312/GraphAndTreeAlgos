@@ -321,11 +321,18 @@ int main(){
         Graph g(vertexcount);
         visited.assign(vertexcount,false);
         bool checks = true;
+        int edgecount = 0;
         while (checks){
             int from, to;
             cout << "Enter space-seperated vertex from and vertex to: ";
             cin >> from >> to;
             g.addEdge(from,to,1);
+            edgecount++;
+            if (edgecount == (vertexcount)*(vertexcount)){
+                cout << "Cannot add any more edges. \n";
+                checks=false;
+                continue;
+            }
             cout << "Do you want to add another edge? (y/n): ";
             char check;
             cin >> check;
@@ -449,11 +456,18 @@ int main(){
             Graph g(vertexcount);
             visited.assign(vertexcount,false);
             bool checks = true; 
+            int edgecount = 0;
             while (checks){
                 int from, to, weight;
                 cout << "Enter space-seperated vertex from, vertex to and weight of edge: ";
                 cin >> from >> to >> weight;
                 g.addEdge(from,to,weight);
+                edgecount++;
+                if (edgecount == (vertexcount)*(vertexcount)){
+                    cout << "Cannot add any more edges. \n";
+                    checks=false;
+                    continue;
+                }
                 cout << "Do you want to add another edge? (y/n): ";
                 char check;
                 cin >> check;
