@@ -41,6 +41,7 @@ public:
 
 //GLOBAL VARIABLES
 vector<bool> visited;
+vector<bool> topologicalvisited;
 vector<int> ans;
 vector<vector<int>> adj;
 int vertexcount;
@@ -152,36 +153,68 @@ vector<int> bfs(vector<vector<int>> adj, int n, int s){
 
 //DFS
 void dfs(int v) {
-    bool first = true;
-    for (int i = 0; i < visited.size(); i++)
-    {
-        if(visited[i]){
-            first = false;
-            break;
-        }
-    }
-    if(first){
-        ans.clear();
-        visited.assign(vertexcount, false);
-    }
     visited[v] = true;
-    ans.push_back(v);
+    cout << v << " ";
     for (int u : adj[v]) {
         if (!visited[u])
             dfs(u);
     }
-    
 }
 
 //TOPOLOGICAL SORTING
+void topologicaldfs(int v) {
+    topologicalvisited[v] = true;
+    for (int u : adj[v]) {
+        if (!topologicalvisited[u])
+            topologicaldfs(u);
+    }
+    ans.push_back(v);
+}
 void topological_sort(int n) {
-    visited.assign(n, false);
+    topologicalvisited.assign(n, false);
     ans.clear();
     for (int i = 0; i < n; ++i) {
-        if (!visited[i])
-            dfs(i);
+        if (!topologicalvisited[i])
+            topologicaldfs(i);
     }
     reverse(ans.begin(), ans.end());
+}
+
+// CHECKING CYCLIC
+bool isCyclicUtil(int v, bool vis[], bool *recStack)
+{
+    if(vis[v] == false)
+    {
+        vis[v] = true;
+        recStack[v] = true;
+        list<int>::iterator i;
+        for (int u : adj[v])
+        {
+            if ( !vis[u] && isCyclicUtil(u, vis, recStack) )
+                return true;
+            else if (recStack[u])
+                return true;
+        }
+ 
+    }
+    recStack[v] = false;
+    return false;
+}
+
+bool isCyclic()
+{
+    bool *visit = new bool[vertexcount];
+    bool *recStack = new bool[vertexcount];
+    for(int i = 0; i < vertexcount; i++)
+    {
+        visit[i] = false;
+        recStack[i] = false;
+    }
+    for(int i = 0; i < vertexcount; i++)
+        if ( !visit[i] && isCyclicUtil(i, visit, recStack))
+            return true;
+ 
+    return false;
 }
 
 //MINIMUM SPANNING TREE
@@ -230,14 +263,27 @@ bool isDirected(vector<vector<int>> graph){
         for (int j = 0; j < vertexcount; j++)
             {
                 if(graph[i][j] != graph[j][i])
-                    return false;
+                    return true;
             }
     }
-    return true; 
+    return false; 
 }
 
 bool isConnected(vector<vector<int>> graph){
-    vector<int> traversal = bfs(adj,vertexcount,0);
+    Graph newG(vertexcount);
+    newG.adjacencyMatrix = graph;
+    for (int i = 0; i < vertexcount; i++)
+    {
+        for (int j = 0; j < vertexcount; j++)
+        {
+            if((newG.adjacencyMatrix[i][j] == 0) && (newG.adjacencyMatrix[j][i] != 0))
+                newG.adjacencyMatrix[i][j] = newG.adjacencyMatrix[j][i];
+            else if((newG.adjacencyMatrix[i][j] != 0) && (newG.adjacencyMatrix[j][i] == 0))
+                newG.adjacencyMatrix[j][i] = newG.adjacencyMatrix[i][j];
+        }
+    }
+    
+    vector<int> traversal = bfs(newG.adjacencyList(),vertexcount,0);
     return traversal.size() == vertexcount;
 }
 
@@ -270,9 +316,10 @@ int main(){
         
     //Unweighted Graph
     if (weighted == 0){
-        cout << "Enter number of vertices in unweighted graph";
+        cout << "Enter number of vertices in unweighted graph: ";
         cin >> vertexcount;
         Graph g(vertexcount);
+        visited.assign(vertexcount,false);
         bool checks = true;
         while (checks){
             int from, to;
@@ -286,8 +333,9 @@ int main(){
                 continue;
             }
             else{checks=false;}
-            visited.assign(vertexcount,false);
         }
+
+        adj = g.adjacencyList();
     
         while(true){
             cout << '\n';
@@ -327,13 +375,20 @@ int main(){
 
             //Topological Sorting
             else if(option == 3){
-                topological_sort(vertexcount);
-                cout << "The topological ordering of vertices is: ";
-                for (int i = 0; i < ans.size(); i++)
-                {
-                    cout << ans[i] << " ";
+                if(isConnected(g.adjacencyMatrix) && isDirected(g.adjacencyMatrix) && !isCyclic()){
+                    topological_sort(vertexcount);
+                    cout << "The topological ordering of vertices is: ";
+                    for (int i = 0; i < ans.size(); i++)
+                    {
+                        cout << ans[i] << " ";
+                    }
+                    topologicalvisited.assign(n,false);
+                    ans.clear();
+                    cout << '\n';
                 }
-                cout << '\n';
+                else{
+                    cout << "The input graph is not a directed acyclic graph, hence no topological sorting can be found.\n";
+                }
             }
 
             //Transitive Closure
@@ -362,8 +417,9 @@ int main(){
                 int root;
                 cout << "Input starting vertex for DFS: ";
                 cin >> root;
-                dfs(root);
                 cout << "The DFS-ordering of the graph is: ";
+                dfs(root);
+                visited.assign(n,false);
                 for (int i = 0; i < ans.size(); i++)
                 {
                     cout << ans[i] << " ";
@@ -391,6 +447,7 @@ int main(){
             cout << "Enter number of vertices in weighted graph: ";
             cin >> vertexcount;
             Graph g(vertexcount);
+            visited.assign(vertexcount,false);
             bool checks = true; 
             while (checks){
                 int from, to, weight;
@@ -404,8 +461,8 @@ int main(){
                     continue;
                 }
                 else{checks=false;}
-                visited.assign(vertexcount,false);
             }
+            adj = g.adjacencyList();
         while (true){
             cout << "Choose an option to proceed: " << '\n';
             cout << "option 1: Check if a graph colouring is valid: " << '\n';
@@ -443,13 +500,20 @@ int main(){
             
             //Topological Sorting
             else if(option == 3){
-                topological_sort(vertexcount);
-                cout << "The topological ordering of vertices is: ";
-                for (int i = 0; i < ans.size(); i++)
-                {
-                    cout << ans[i] << " ";
+                if(isDirected(g.adjacencyMatrix) ){
+                    topological_sort(vertexcount);
+                    cout << "The topological ordering of vertices is: ";
+                    for (int i = 0; i < ans.size(); i++)
+                    {
+                        cout << ans[i] << " ";
+                    }
+                    topologicalvisited.assign(n,false);
+                    ans.clear();
+                    cout << '\n';
                 }
-                cout << '\n';
+                else{
+                    cout << "The input graph is not a directed acyclic graph, hence no topological sorting can be found.\n";
+                }
             }
 
             //Transitive Closure
@@ -479,8 +543,9 @@ int main(){
                 int root;
                 cout << "Input starting vertex for DFS: ";
                 cin >> root;
-                dfs(root);
                 cout << "The DFS-ordering of the graph is: ";
+                dfs(root);
+                visited.assign(n,false);
                 for (int i = 0; i < ans.size(); i++)
                 {
                     cout << ans[i] << " ";
