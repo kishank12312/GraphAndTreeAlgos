@@ -254,7 +254,7 @@ void primMST(vector<vector<int>> graph)
         totalweight += graph[i][parent[i]];
     }
     cout << '\n';
-    cout << "The total weight of the minimum spanning tree is: " << totalweight;
+    cout << "The total weight of the minimum spanning tree is: " << totalweight << '\n';
 }
 
 bool isDirected(vector<vector<int>> graph){
@@ -556,6 +556,7 @@ int main(){
 
             //Prim's        
             else if (option == 7){
+                    cout << "\n\n";
                     primMST(g.adjacencyMatrix);
             }
 
