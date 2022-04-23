@@ -230,6 +230,19 @@ int mstUtil(int key[], bool mstSet[])
  
 void primMST(vector<vector<int>> graph)
 {
+    Graph newG(vertexcount);
+    newG.adjacencyMatrix = graph;
+    for (int i = 0; i < vertexcount; i++)
+    {
+        for (int j = 0; j < vertexcount; j++)
+        {
+            if((newG.adjacencyMatrix[i][j] == 0) && (newG.adjacencyMatrix[j][i] != 0))
+                newG.adjacencyMatrix[i][j] = newG.adjacencyMatrix[j][i];
+            else if((newG.adjacencyMatrix[i][j] != 0) && (newG.adjacencyMatrix[j][i] == 0))
+                newG.adjacencyMatrix[j][i] = newG.adjacencyMatrix[i][j];
+        }
+    }
+    graph = newG.adjacencyMatrix;
     int parent[vertexcount];
     int key[vertexcount];
     bool mstSet[vertexcount];
@@ -506,7 +519,7 @@ int main(){
             cout << "option 4: Find the transitive closure of the graph: " << '\n';
             cout << "option 5: Traverse from a chosen starting point using Breadth-First Search: " << '\n';
             cout << "option 6: Traverse from a chosen starting point using Depth-First Search: " << '\n';
-            cout << "option 7: find the mininmum spanning path of the graph: "<<'\n';
+            cout << "option 7: find the mininmum spanning tree of the graph: "<<'\n';
             cout << "option 8: quit the program: "<<'\n';
             cout << "==========================================================================" << '\n';
             cout << "\n";
