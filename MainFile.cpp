@@ -1,11 +1,11 @@
 #include<bits/stdc++.h>
 using namespace std;
-
+ 
 class Graph{
 public:
     int vertices;
     vector<vector<int>> adjacencyMatrix;
-
+ 
     Graph(int v){
         this->vertices = v;
         vector<int> row;
@@ -17,11 +17,11 @@ public:
             this->adjacencyMatrix.push_back(row);
         
     }
-
+ 
     void addEdge(int x, int y, int w){
         this->adjacencyMatrix[x][y] = w;
     }
-
+ 
     vector<vector<int>> adjacencyList(){
         vector<vector<int>> adjacencyList(vertices);
         for (int i = 0; i < vertices; i++)
@@ -34,18 +34,18 @@ public:
             }
             
         }
-
+ 
         return adjacencyList;  
     }
 };
-
+ 
 //GLOBAL VARIABLES
 vector<bool> visited;
 vector<bool> topologicalvisited;
 vector<int> ans;
 vector<vector<int>> adj;
 int vertexcount;
-
+ 
 //TRANSITIVE CLOSURE
 void transitiveClosure(vector<vector<int>> graph, int V)
 {
@@ -76,7 +76,7 @@ void transitiveClosure(vector<vector<int>> graph, int V)
         printf("\n");
     }
 }
-
+ 
 //BIPARTITE GRAPH CHECK
 bool isBipartite(vector<vector<int>> G,int V)
 {
@@ -105,7 +105,7 @@ bool isBipartite(vector<vector<int>> G,int V)
     }
     return true;
 }
-
+ 
 //CHECK COLOURING
 bool colouring(Graph graph, vector<int> colours){
     bool ans = true;
@@ -123,13 +123,13 @@ bool colouring(Graph graph, vector<int> colours){
     return ans;
     
 }
-
+ 
 //BFS
 vector<int> bfs(vector<vector<int>> adj, int n, int s){
     queue<int> q;
     vector<bool> used(n);
     vector<int> d(n), p(n);
-
+ 
     vector<int> path;
     q.push(s);
     used[s] = true;
@@ -150,7 +150,7 @@ vector<int> bfs(vector<vector<int>> adj, int n, int s){
     
     return path;
 }
-
+ 
 //DFS
 void dfs(int v) {
     visited[v] = true;
@@ -160,7 +160,7 @@ void dfs(int v) {
             dfs(u);
     }
 }
-
+ 
 //TOPOLOGICAL SORTING
 void topologicaldfs(int v) {
     topologicalvisited[v] = true;
@@ -179,7 +179,7 @@ void topological_sort(int n) {
     }
     reverse(ans.begin(), ans.end());
 }
-
+ 
 // CHECKING CYCLIC
 bool isCyclicUtil(int v, bool vis[], bool *recStack)
 {
@@ -200,7 +200,7 @@ bool isCyclicUtil(int v, bool vis[], bool *recStack)
     recStack[v] = false;
     return false;
 }
-
+ 
 bool isCyclic()
 {
     bool *visit = new bool[vertexcount];
@@ -216,7 +216,7 @@ bool isCyclic()
  
     return false;
 }
-
+ 
 //MINIMUM SPANNING TREE
 int mstUtil(int key[], bool mstSet[])
 {
@@ -226,8 +226,8 @@ int mstUtil(int key[], bool mstSet[])
             min = key[v], min_index = v;
     return min_index;
 }
-
-
+ 
+ 
 void primMST(vector<vector<int>> graph)
 {
     int parent[vertexcount];
@@ -241,9 +241,9 @@ void primMST(vector<vector<int>> graph)
     {
         int u = mstUtil(key, mstSet);
         mstSet[u] = true;
-
+ 
         for (int v = 0; v < vertexcount; v++)
-
+ 
             if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
                 parent[v] = u, key[v] = graph[u][v];
     }
@@ -256,7 +256,7 @@ void primMST(vector<vector<int>> graph)
     cout << '\n';
     cout << "The total weight of the minimum spanning tree is: " << totalweight << '\n';
 }
-
+ 
 bool isDirected(vector<vector<int>> graph){
     for (int i = 0; i < vertexcount; i++)
     {
@@ -268,7 +268,7 @@ bool isDirected(vector<vector<int>> graph){
     }
     return false; 
 }
-
+ 
 bool isConnected(vector<vector<int>> graph){
     Graph newG(vertexcount);
     newG.adjacencyMatrix = graph;
@@ -286,11 +286,11 @@ bool isConnected(vector<vector<int>> graph){
     vector<int> traversal = bfs(newG.adjacencyList(),vertexcount,0);
     return traversal.size() == vertexcount;
 }
-
-
+ 
+ 
 int main(){
-
-    int n;
+ 
+    char n;
     cout << "\n\n";
     cout << "Welcome to the Graph AlgoSimulator ADT" <<'\n';
     int weighted = -1;
@@ -298,21 +298,22 @@ int main(){
         cout << "Enter 1 to input a weighted graph, 0 to input an unweighted graph: ";
         cin >> n;
         
-        if(n==0){
+        if(n=='0'){
             weighted = 0;
             break;
         }
                 
-        else if(n==1){
+        else if(n=='1'){
             weighted = 1;
             break;
         }
         
-        else
+        else{
             cout << "Invalid Input, please try again. \n";
-            continue;
+            cin.ignore(100,'\n');
+            continue;}
     }
-
+ 
         
     //Unweighted Graph
     if (weighted == 0){
@@ -341,11 +342,12 @@ int main(){
             }
             else{checks=false;}
         }
-
+ 
         adj = g.adjacencyList();
     
         while(true){
-            cout << '\n';
+            cout << "\n";
+            cout << "==========================================================================" << '\n';
             cout << "Choose an option to proceed: " << '\n';
             cout << "option 1: Check if a graph colouring is valid: " << '\n';
             cout << "option 2: Check if the graph is bipartite: " << '\n';
@@ -353,13 +355,18 @@ int main(){
             cout << "option 4: Find the transitive closure of the graph: " << '\n';
             cout << "option 5: Traverse from a chosen starting point using Breadth-First Search: " << '\n';
             cout << "option 6: Traverse from a chosen starting point using Depth-First Search: " << '\n';
+            cout << "option 7: quit the program "<<'\n';
+            cout << "==========================================================================" << '\n';
+            cout << "\n";
+            cout << "Input option: ";
             
             int option;
             cin >> option;
-
-
+ 
+ 
             //Colouring
             if(option == 1){
+                cout << "\n\n";
                 vector<int> colours(vertexcount);
                 for (int i = 0; i < vertexcount; i++)
                 {
@@ -370,18 +377,22 @@ int main(){
                     cout << "The given colouring is a valid Colouring \n";}
                 else{
                     cout << "The given colouring is a invalid Colouring \n";}
+                cout << "\n\n";
                 }
             
             //Bipartite
             else if(option == 2){
+                cout << "\n\n";
                 if(isBipartite(g.adjacencyMatrix,vertexcount)){
                     cout << "The graph is bipartite. \n";}
                 else{
                     cout << "The graph is not bipartite. \n";}
+                cout << "\n\n";
             }
-
+ 
             //Topological Sorting
             else if(option == 3){
+                cout << "\n\n";
                 if(isConnected(g.adjacencyMatrix) && isDirected(g.adjacencyMatrix) && !isCyclic()){
                     topological_sort(vertexcount);
                     cout << "The topological ordering of vertices is: ";
@@ -395,17 +406,21 @@ int main(){
                 }
                 else{
                     cout << "The input graph is not a directed acyclic graph, hence no topological sorting can be found.\n";
+                cout << "\n\n";
                 }
             }
-
+ 
             //Transitive Closure
             else if(option == 4){
+                cout << "\n\n";
                 cout << "The transitive closure of the graph is: \n";
                 transitiveClosure(g.adjacencyMatrix,vertexcount);
+                cout << "\n\n";
             }
-
+ 
             //BFS
             else if(option == 5){
+                cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for BFS: ";
                 cin >> root;
@@ -416,11 +431,12 @@ int main(){
                 {
                     cout << traversal[i] << " ";
                 }
-                cout << '\n';
+                cout << "\n\n";
             }
-
+ 
             //DFS
             else if(option == 6){
+                cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for DFS: ";
                 cin >> root;
@@ -431,24 +447,26 @@ int main(){
                 {
                     cout << ans[i] << " ";
                 }
-                cout << '\n';
+                cout << "\n\n";
             }
-
+ 
             //Invalid
-            else{
-                cout << "Invalid option selected \n";
+            else if (option == 7){
+                cout << "You chose to quit the program.";
+                return 0;
             }
-            char cont;
-            cout <<"Do you want to continue? (y/n) ";
-            cin >> cont;
-            if (cont == 'y'){
+            
+            else{
+                cout << "\n\n";
+                cout << "Invalid option selected \n";
+                cout << "\n\n";
                 continue;
             }
-            else{return 0;}
+            
         }
     }
-
-
+ 
+ 
     //Weighted Graph 
     else if (weighted == 1){
             cout << "Enter number of vertices in weighted graph: ";
@@ -478,6 +496,8 @@ int main(){
             }
             adj = g.adjacencyList();
         while (true){
+            cout << "\n";
+            cout << "==========================================================================" << '\n';
             cout << "Choose an option to proceed: " << '\n';
             cout << "option 1: Check if a graph colouring is valid: " << '\n';
             cout << "option 2: Check if the graph is bipartite: " << '\n';
@@ -486,12 +506,17 @@ int main(){
             cout << "option 5: Traverse from a chosen starting point using Breadth-First Search: " << '\n';
             cout << "option 6: Traverse from a chosen starting point using Depth-First Search: " << '\n';
             cout << "option 7: find the mininmum spanning path of the graph: "<<'\n';
-
+            cout << "option 8: quit the program: "<<'\n';
+            cout << "==========================================================================" << '\n';
+            cout << "\n";
+            cout << "Input option: ";
+ 
             int option;
             cin >> option;
-
+ 
             //Colouring
             if(option == 1){
+                cout << "\n\n";
                 vector<int> colours(vertexcount);
                 for (int i = 0; i < vertexcount; i++)
                 {
@@ -502,18 +527,22 @@ int main(){
                     cout << "Valid Colouring \n";}
                 else{
                     cout << "Invalid Colouring \n";}
+                cout << "\n\n";
             }
-
+ 
             //Bipartite    
             else if(option == 2){
+                cout << "\n\n";
                 if(isBipartite(g.adjacencyMatrix,vertexcount)){
                     cout << "The graph is bipartite. \n";}
                 else{
                     cout << "The graph is not bipartite. \n";}
+                cout << "\n\n";
             }
             
             //Topological Sorting
             else if(option == 3){
+                cout << "\n\n";
                 if(isDirected(g.adjacencyMatrix) ){
                     topological_sort(vertexcount);
                     cout << "The topological ordering of vertices is: ";
@@ -528,17 +557,21 @@ int main(){
                 else{
                     cout << "The input graph is not a directed acyclic graph, hence no topological sorting can be found.\n";
                 }
+                cout << "\n\n";
             }
-
+ 
             //Transitive Closure
             else if(option == 4){
+                cout << "\n\n";
                 cout << "The transitive closure of the graph is: \n";
                 transitiveClosure(g.adjacencyMatrix,vertexcount);
-
+ 
+                cout << "\n\n";
             }
-
+ 
             //BFS
             else if(option == 5){
+                cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for BFS: ";
                 cin >> root;
@@ -548,12 +581,13 @@ int main(){
                 {
                     cout << traversal[i] << " ";
                 }
-                cout << '\n';
+                cout << "\n\n";
                 
             }
-
+ 
             //DFS
             else if(option == 6){
+                cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for DFS: ";
                 cin >> root;
@@ -564,28 +598,30 @@ int main(){
                 {
                     cout << ans[i] << " ";
                 }
-                cout << '\n';
-
+                cout << "\n\n";
+ 
             }
-
+ 
             //Prim's        
             else if (option == 7){
                     cout << "\n\n";
                     primMST(g.adjacencyMatrix);
+                    cout << "\n\n";
             }
-
+ 
             //Invalid option
-            else{
-                cout << "Invalid option selected \n";
+            
+            else if (option == 8){
+                cout << "You chose to quit the program.";
+                return 0;
             }
-            char cont;
-            cout <<"Do you want to continue? (y/n) ";
-            cin >> cont;
-            if (cont == 'y'){
+            else{
+                cout << "\n\n";
+                cout << "Invalid option selected \n";
+                cout << "\n\n";
                 continue;
             }
-            else{return 0;}
         }
         }
-
+ 
 }
