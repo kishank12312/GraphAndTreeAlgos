@@ -360,12 +360,12 @@ int main(){
             cout << "\n";
             cout << "Input option: ";
             
-            int option;
+            char option;
             cin >> option;
  
  
             //Colouring
-            if(option == 1){
+            if(option == '1'){
                 cout << "\n\n";
                 vector<int> colours(vertexcount);
                 for (int i = 0; i < vertexcount; i++)
@@ -381,7 +381,7 @@ int main(){
                 }
             
             //Bipartite
-            else if(option == 2){
+            else if(option == '2'){
                 cout << "\n\n";
                 if(isBipartite(g.adjacencyMatrix,vertexcount)){
                     cout << "The graph is bipartite. \n";}
@@ -391,7 +391,7 @@ int main(){
             }
  
             //Topological Sorting
-            else if(option == 3){
+            else if(option == '3'){
                 cout << "\n\n";
                 if(isConnected(g.adjacencyMatrix) && isDirected(g.adjacencyMatrix) && !isCyclic()){
                     topological_sort(vertexcount);
@@ -411,7 +411,7 @@ int main(){
             }
  
             //Transitive Closure
-            else if(option == 4){
+            else if(option == '4'){
                 cout << "\n\n";
                 cout << "The transitive closure of the graph is: \n";
                 transitiveClosure(g.adjacencyMatrix,vertexcount);
@@ -419,7 +419,7 @@ int main(){
             }
  
             //BFS
-            else if(option == 5){
+            else if(option == '5'){
                 cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for BFS: ";
@@ -435,7 +435,7 @@ int main(){
             }
  
             //DFS
-            else if(option == 6){
+            else if(option == '6'){
                 cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for DFS: ";
@@ -451,7 +451,7 @@ int main(){
             }
  
             //Invalid
-            else if (option == 7){
+            else if (option == '7'){
                 cout << "You chose to quit the program.";
                 return 0;
             }
@@ -459,6 +459,7 @@ int main(){
             else{
                 cout << "\n\n";
                 cout << "Invalid option selected \n";
+                cin.ignore(100,'\n');
                 cout << "\n\n";
                 continue;
             }
@@ -511,11 +512,11 @@ int main(){
             cout << "\n";
             cout << "Input option: ";
  
-            int option;
+            char option;
             cin >> option;
  
             //Colouring
-            if(option == 1){
+            if(option == '1'){
                 cout << "\n\n";
                 vector<int> colours(vertexcount);
                 for (int i = 0; i < vertexcount; i++)
@@ -531,7 +532,7 @@ int main(){
             }
  
             //Bipartite    
-            else if(option == 2){
+            else if(option == '2'){
                 cout << "\n\n";
                 if(isBipartite(g.adjacencyMatrix,vertexcount)){
                     cout << "The graph is bipartite. \n";}
@@ -541,7 +542,7 @@ int main(){
             }
             
             //Topological Sorting
-            else if(option == 3){
+            else if(option == '3'){
                 cout << "\n\n";
                 if(isDirected(g.adjacencyMatrix) ){
                     topological_sort(vertexcount);
@@ -561,7 +562,7 @@ int main(){
             }
  
             //Transitive Closure
-            else if(option == 4){
+            else if(option == '4'){
                 cout << "\n\n";
                 cout << "The transitive closure of the graph is: \n";
                 transitiveClosure(g.adjacencyMatrix,vertexcount);
@@ -570,7 +571,7 @@ int main(){
             }
  
             //BFS
-            else if(option == 5){
+            else if(option == '5'){
                 cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for BFS: ";
@@ -586,7 +587,7 @@ int main(){
             }
  
             //DFS
-            else if(option == 6){
+            else if(option == '6'){
                 cout << "\n\n";
                 int root;
                 cout << "Input starting vertex for DFS: ";
@@ -603,7 +604,7 @@ int main(){
             }
  
             //Prim's        
-            else if (option == 7){
+            else if (option == '7'){
                     cout << "\n\n";
                     primMST(g.adjacencyMatrix);
                     cout << "\n\n";
@@ -611,13 +612,14 @@ int main(){
  
             //Invalid option
             
-            else if (option == 8){
+            else if (option == '8'){
                 cout << "You chose to quit the program.";
                 return 0;
             }
             else{
                 cout << "\n\n";
                 cout << "Invalid option selected \n";
+                cin.ignore(100,'\n');
                 cout << "\n\n";
                 continue;
             }
