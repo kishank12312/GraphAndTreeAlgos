@@ -128,12 +128,10 @@ bool colouring(Graph graph, vector<int> colours){
 vector<int> bfs(vector<vector<int>> adj, int n, int s){
     queue<int> q;
     vector<bool> used(n);
-    vector<int> d(n), p(n);
  
     vector<int> path;
     q.push(s);
     used[s] = true;
-    p[s] = -1;
     while (!q.empty()) {
         int v = q.front();
         path.push_back(v);
@@ -142,8 +140,6 @@ vector<int> bfs(vector<vector<int>> adj, int n, int s){
             if (!used[u]) {
                 used[u] = true;
                 q.push(u);
-                d[u] = d[v] + 1;
-                p[u] = v;
             }
         }
     }
